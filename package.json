@@ -1,0 +1,19 @@
+{
+  "name": "streamingarg",
+  "version": "1.0.0",
+  "private": true,
+  "description": "StreamingArg - tienda y administraci\u00f3n de suscripciones",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2"
+  },
+  "devDependencies": {
+    "vercel": "^48.1.0"
+  }
+}

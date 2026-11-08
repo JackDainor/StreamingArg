@@ -1,0 +1,8 @@
+-- StreamingArg schema. También se crea automáticamente desde las funciones API.
+CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS products (id SERIAL PRIMARY KEY, name TEXT NOT NULL, description TEXT DEFAULT '', logo TEXT DEFAULT '', price_usdt NUMERIC(12,2) DEFAULT 0, active BOOLEAN DEFAULT TRUE, created_at TIMESTAMPTZ DEFAULT NOW());
+CREATE TABLE IF NOT EXISTS customers (id SERIAL PRIMARY KEY, name TEXT NOT NULL, whatsapp TEXT NOT NULL UNIQUE, email TEXT DEFAULT '', created_at TIMESTAMPTZ DEFAULT NOW());
+CREATE TABLE IF NOT EXISTS orders (id SERIAL PRIMARY KEY, customer_id INTEGER REFERENCES customers(id), status TEXT NOT NULL DEFAULT 'pendiente', total_usdt NUMERIC(12,2) NOT NULL DEFAULT 0, total_ars NUMERIC(14,2) NOT NULL DEFAULT 0, notes TEXT DEFAULT '', created_at TIMESTAMPTZ DEFAULT NOW());
+CREATE TABLE IF NOT EXISTS order_items (id SERIAL PRIMARY KEY, order_id INTEGER REFERENCES orders(id) ON DELETE CASCADE, product_id INTEGER REFERENCES products(id), product_name TEXT NOT NULL, quantity INTEGER NOT NULL DEFAULT 1, unit_price_usdt NUMERIC(12,2) NOT NULL DEFAULT 0, unit_price_ars NUMERIC(14,2) NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS subscriptions (id SERIAL PRIMARY KEY, order_item_id INTEGER REFERENCES order_items(id) ON DELETE CASCADE, customer_id INTEGER REFERENCES customers(id), product_name TEXT NOT NULL, sold_usdt NUMERIC(12,2) DEFAULT 0, sold_ars NUMERIC(14,2) DEFAULT 0, start_date DATE, end_date DATE, status TEXT DEFAULT 'activa', notes TEXT DEFAULT '', created_at TIMESTAMPTZ DEFAULT NOW());
+INSERT INTO settings(key,value) VALUES ('ars_per_usdt','1000') ON CONFLICT (key) DO NOTHING;
